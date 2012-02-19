@@ -1,38 +1,72 @@
-
+var http = require("http")
+    ,fs = require('fs')
+    ,querystring = require('querystring')
+    ,connect = require("connect")
+    ,ejs = require("ejs")
+    ,port = process.env.PORT || 3000
+    ,kasabi_api_key = "368389391f29f9442406b400a42e1dfd6eaacb22"
+    ,kasabi_host = "api.kasabi.com"
+    ,kasabi_path = "/dataset/r4d-aid-data/apis/sparql"
+    ,sparql;
+    
 /**
- * Module dependencies.
+ * Precompile our sparql request template and store it
  */
-
-var express = require('express')
-  , routes = require('./routes')
-
-var app = module.exports = express.createServer();
-
-// Configuration
-
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+fs.readFile('sparql.ejs', 'utf8', function(err, data) {
+    if(!err) {
+        sparql = data;
+    }
 });
+    
+connect(
+    connect.logger(),
+    connect.static(__dirname + "/public"),
+    // create a router to handle application paths
+    connect.router(function(app) {
+        app.get("/project/:prid", function(req, res) {
+        
+            var query = ejs.render(sparql, {
+                    prid : req.params.prid,
+                    kasabi_api_key : kasabi_api_key
+                }),
+                opts = {
+                    host : kasabi_host,
+                    path : kasabi_path + '?' + query,
+                    port : "80"
+                },
+                req_params = querystring.parse(req.url.split("?")[1]);
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
-});
+            http.get(opts, function(response){
+                var results = '';
+                response.on('data', function(chunk) {
+                    results += chunk;  
+                });
+                response.on('end', function(){
+                    //accept jsonp requests
+                    if (req_params.callback) {
+                    // if we have a callback function name, do JSONP
+                        results = req_params.callback + "(" + results + ");";
+                    } 
 
-app.configure('production', function(){
-  app.use(express.errorHandler()); 
-});
+                    // write the results to the output
+                    res.writeHead(200, {
+                        // change MIME type to JSON
+                        "Content-Type": (req_params.callback) ? "application/javascript" :"application/json",
+                        "Content-Length": results.length
+                    });
 
-// Routes
+                    res.end(results)
+                });
+            });
+        });
+    })
+).listen(port);
 
-app.get('/', routes.index);
+console.log('r4d server running on port ' + port);
 
-// Arbitrate port for c9 / heroku
-var port = process.env.PORT || 3000;
-app.listen(port);
 
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+
+
+
+
