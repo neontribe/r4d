@@ -136,6 +136,18 @@
         return monkeys(template, d.createDocumentFragment());
     };
 
+    function map (obj, iterator, context) {
+        var results = [],
+            nativeMap = Array.prototype.map;
+        if (obj == null) return results;
+        if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+        each(obj, function(value, index, list) {
+          results[results.length] = iterator.call(context, value, index, list);
+        });
+        if (obj.length === +obj.length) results.length = obj.length;
+        return results;
+    };
+
     var scriptInfo = getScriptData();
     var url_parser = document.createElement('a');
         url_parser.href = scriptInfo.src;
@@ -166,7 +178,7 @@
                                 data.proj_title],
                             ['div', {'class': 'list-wrapper'},
                                 ['ul',
-                                   data.outputs.map(function(item) {
+                                   map(data.outputs, function(item) {
                                        return ['li',
                                                    ['a',
                                                        {
