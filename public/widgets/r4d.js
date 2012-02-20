@@ -8,6 +8,7 @@
             script,
             src,
             chromeless,
+            subprojects,
             i;
 
         for (i = 0; i < scripts.length; i += 1) {
@@ -22,6 +23,12 @@
                 // Check to see if we should be showing chrome
                 if (chromeless && chromeless !== 'false') {
                     info.chromeless = true;
+                }
+                subgroups = script.getAttribute('data-r4dw-subprojects');
+                // Check to see if we should be showing grouping outputs into
+                // subprojects
+                if (subprojects && subprojects !== 'false') {
+                    info.subprojects = true;
                 }
             }
             if (src && /r4d\.js/.test(src)) { // if this is the main working script
@@ -236,7 +243,7 @@
                                        })
                                     ]
                                 ],
-                                ['a', ['span', 'And 5 more...']]
+                                ['a', ['span', 'And more...']]
                             ]
                         ];
 
