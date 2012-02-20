@@ -164,19 +164,22 @@
                             ['h3',
                                 "Resources from Research for Development relating to ",
                                 data.proj_title],
-                            ['ul',
-                                data.outputs.map(function(item) {
-                                    return ['li',
-                                                ['a',
-                                                    {
-                                                        'href': item.output.value,
-                                                        'target': '_blank'
-                                                    },
-                                                    item.outputTitle.value
-                                                ]
-                                            ];
-                                }),
+                            ['div', {'class': 'list-wrapper'},
+                                ['ul',
+                                   data.outputs.map(function(item) {
+                                       return ['li',
+                                                   ['a',
+                                                       {
+                                                           'href': item.output.value,
+                                                           'target': '_blank'
+                                                       },
+                                                       item.outputTitle.value
+                                                   ]
+                                               ];
+                                   }),
+                                ]
                             ],
+                            
                             ['a', ['span', 'And 5 more...']]
                         ]
                     ];
@@ -184,23 +187,20 @@
                     var div = document.createElement('div');
                     div.className = "development-widget";
                     div.appendChild(microjungle(template));
-                    
-                    // Deal with clicks on the scroller
-                    //It'll be the last element in out div
-                    var cur_top_li = null;
-                    div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -1].onclick = function (evt, item) {
-                        var ul = div.getElementsByTagName('ul')[0];
-                        if (cur_top_li === null) {
-                            cur_top_li = ul.childNodes[0];
-                        }
-                        var target_li = cur_top_li.nextSibling;
-                        //ul.scrollTop = target_li.scrollHeight;
-                        target_li.scrollIntoView();
-                        cur_top_li = target_li;
-                        return false;
-                    }
-                    
+                    // Render our stuff
                     scriptInfo.initial_script.parentNode.insertBefore(div, scriptInfo.initial_script);
+                    
+                    // Load Emile to do animations
+                    // We do this late since the click on the scroll link isn't urgent
+                    loadScript(base_url + "emile.js", function(){
+                        // Deal with clicks on the scroller
+                        //It'll be the last element in out div
+                        div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -1].onclick = function (evt, item) {
+                            var ul = div.getElementsByTagName('ul')[0];
+                            emile(ul, 'width:-100px', {duration: 300});
+                            return false;
+                        }
+                    });
                 });
             }
         });

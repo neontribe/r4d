@@ -27,9 +27,9 @@ padding:10px 10px 10px 70px !important;
 color:#fff !important;
 }
 
-.development-widget div ul {
+.development-widget div.list-wrapper {
     height: 200px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .development-widget div ul li {
