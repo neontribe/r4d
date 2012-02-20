@@ -1,5 +1,5 @@
 (function(window, undefined){
-    
+
     function getScriptData() {
         var scripts = document.getElementsByTagName('script'),
             info = {},
@@ -7,7 +7,7 @@
             script,
             src,
             chromeless;
-            
+
         for (var i = 0; i < scripts.length; i++) {
             script = scripts[i];
             id = script.getAttribute('data-r4dw-project_id');
@@ -21,7 +21,7 @@
                 if (chromeless && chromeless !== 'false') {
                     info.chromeless = true;
                 }
-            }      
+            }
             if (src && /r4d\.js/.test(src)) { // if this is the main working script
                 info.src = src;
             }
@@ -37,7 +37,7 @@
         script.type = 'text/javascript';
         script.async = true;
         script.src = url;
-        
+
         var entry = document.getElementsByTagName('script')[0];
         entry.parentNode.insertBefore(script, entry);
         if (script.addEventListener) {
@@ -53,7 +53,7 @@
             });
         }
     }
-    
+
     function loadStylesheet(url) {
         var link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -66,7 +66,7 @@
     function isCssReady(callback) {
         var testElem = document.createElement('span');
         testElem.id = 'development-widget-css-ready';
-        testElem.style = 'color: #fff';
+        testElem.style.color = '#fff';
         var entry = document.getElementsByTagName('script')[0];
         entry.parentNode.insertBefore(testElem, entry);
 
@@ -89,21 +89,21 @@
             }
         }());
     }
-    
+
     /**
      * Templating!
      * https://github.com/deepsweet/microjungle
      */
     var microjungle = function(template) {
         var d = document;
-    
+
         // they just doing their job.
         function monkeys(what, who) {
             var l = what.length;
-    
+
             for (var i = 0; i < l; i++) {
                 var j = what[i];
-    
+
                 if (j) {
                     if (typeof j == 'string') {
                         //who.appendChild(d.createTextNode(j));
@@ -113,13 +113,13 @@
                             var el = d.createElement(j.shift()),
                                 attrs = {}.toString.call(j[0]) === '[object Object]' && j.shift(),
                                 k;
-    
+
                             if (attrs) {
                                 for(k in attrs) {
                                     attrs[k] && el.setAttribute(k, attrs[k]);
                                 }
                             }
-    
+
                             who.appendChild(monkeys(j, el));
                         } else if (j.nodeType === 11) {
                             who.appendChild(j);
@@ -129,10 +129,10 @@
                     }
                 }
             }
-    
+
             return who;
         };
-    
+
         return monkeys(template, d.createDocumentFragment());
     };
 
@@ -158,7 +158,7 @@
                     var data = {outputs: resp.results.bindings,
                             proj_title: resp.results.bindings[0].projectTitle.value,
                             proj_url: resp.results.bindings[0].r4dProject.value};
-                    
+
                     var template = [
                         ['div',
                             ['h3',
@@ -179,17 +179,17 @@
                                    }),
                                 ]
                             ],
-                            
+
                             ['a', ['span', 'And 5 more...']]
                         ]
                     ];
-                    
+
                     var div = document.createElement('div');
                     div.className = "development-widget";
                     div.appendChild(microjungle(template));
                     // Render our stuff
                     scriptInfo.initial_script.parentNode.insertBefore(div, scriptInfo.initial_script);
-                    
+
                     // Load Emile to do animations
                     // We do this late since the click on the scroll link isn't urgent
                     loadScript(base_url + "emile.js", function(){
