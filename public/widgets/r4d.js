@@ -137,7 +137,8 @@
     };
 
     function each (obj, iterator, context) {
-        var nativeForEach = Array.prototype.forEach;
+        var nativeForEach = Array.prototype.forEach,
+            breaker = {};
         if (obj == null) return;
         if (nativeForEach && obj.forEach === nativeForEach) {
           obj.forEach(iterator, context);
