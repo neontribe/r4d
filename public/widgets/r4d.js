@@ -136,6 +136,24 @@
         return monkeys(template, d.createDocumentFragment());
     };
 
+    function each (obj, iterator, context) {
+        var nativeForEach = Array.prototype.forEach;
+        if (obj == null) return;
+        if (nativeForEach && obj.forEach === nativeForEach) {
+          obj.forEach(iterator, context);
+        } else if (obj.length === +obj.length) {
+          for (var i = 0, l = obj.length; i < l; i++) {
+            if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+          }
+        } else {
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              if (iterator.call(context, obj[key], key, obj) === breaker) return;
+            }
+          }
+        }
+    };
+
     function map (obj, iterator, context) {
         var results = [],
             nativeMap = Array.prototype.map;
