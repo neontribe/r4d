@@ -81,7 +81,7 @@
                 value = node.currentStyle['color'];
             }
             if (value && value === 'rgb(186, 218, 85)' ||
-                value.lower() === '#bada55')
+                value.toLowerCase() === '#bada55')
             {
                 callback();
             } else {
