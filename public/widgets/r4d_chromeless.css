@@ -1,0 +1,41 @@
+#development-widget-css-ready {
+    color: #bada55 !important;
+}
+
+.development-widget div {
+padding:10px !important;
+border:1px solid !important;
+margin:10px 0 !important;
+}
+
+.development-widget div * {
+margin: 0 !important;
+padding: 0 !important;
+border: 0 !important;
+font-style:normal !important;
+font-weight:normal !important;
+background:transparent !important;
+vertical-align: baseline !important;
+}
+
+.development-widget div ul {
+padding:10px 0 !important;
+}
+
+.development-widget div h4 {
+}
+
+.development-widget div ul li {
+margin:0 0 5px !important;
+line-height:1.2 !important;
+list-style-position:inside;
+}
+
+.development-widget div > a {
+display:block !important;
+text-align:right !important;
+}
+
+.development-widget div ul li a {
+display:inline !important;
+}

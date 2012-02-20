@@ -1,0 +1,90 @@
+#development-widget-css-ready {
+    color: #bada55 !important;
+}
+
+.development-widget div {
+border:2px solid #663366 !important;
+margin:10px 0 !important;
+border-radius:8px;
+background:#fff !important;
+}
+
+.development-widget div * {
+font-family:arial !important;
+margin: 0 !important;
+padding: 0 !important;
+border: 0 !important;
+font-style:normal !important;
+font-weight:normal !important;
+background:transparent !important;
+vertical-align: baseline !important;
+}
+
+.development-widget div h3 {
+font-size:16px !important;
+background:#663366 url(r4d.png) no-repeat 10px center !important;
+padding:10px 10px 10px 70px !important;
+color:#fff !important;
+}
+
+.development-widget div ul {
+    height: 200px;
+    overflow: auto;
+}
+
+.development-widget div ul li {
+padding:12px !important;
+line-height:1.2 !important;
+list-style-position:inside;
+font-size:12px !important;
+list-style:none !important;
+background-image: linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+background-image: -o-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+}
+
+.development-widget div > a {
+display:block !important;
+text-align:right !important;
+padding:5px 15px 20px !important;
+text-decoration:none !important;
+font-size:14px !important;
+}
+
+.development-widget em {
+color:#fff !important;
+font-size:16px !important;
+font-style:italic !important;
+}
+
+.development-widget div > a span {
+background:#663366 !important;
+padding:5px 8px !important;
+color:#fff !important;
+border-radius:5px !important;
+border:2px solid #fff !important;
+box-shadow:0px 0px 5px 2px #999;
+font-weight:bold !important;
+}
+
+.development-widget div > a:hover span, .development-widget div > a:active span, .development-widget div > a:focus span {
+background:#000 !important;
+}
+
+.development-widget div ul li a {
+display:inline !important;
+font-style:italic !important;
+text-decoration:none !important;
+color:#663366 !important;
+}
+
+.development-widget div ul li a:hover, .development-widget div ul li a:active, .development-widget div ul li a:focus {
+color:#111 !important;
+}
+
+.development-widget div ul li a:after {
+content:" \21D7";
+font-size:16px;
+}
