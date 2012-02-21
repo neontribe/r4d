@@ -247,6 +247,8 @@
                             ]
                         ];
 
+
+
                     div.className = "development-widget";
                     div.appendChild(microjungle(template));
                     // Render our stuff
