@@ -234,7 +234,7 @@
                                             return ['li',
                                                        ['a',
                                                            {
-                                                                'href': item.output.value,
+                                                                'href': item.output.value + 'Default.aspx',
                                                                 'target': '_blank'
                                                             },
                                                            item.outputTitle.value
