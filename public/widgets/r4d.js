@@ -24,7 +24,7 @@
                 if (chromeless && chromeless !== 'false') {
                     info.chromeless = true;
                 }
-                subgroups = script.getAttribute('data-r4dw-subprojects');
+                subprojects = script.getAttribute('data-r4dw-subprojects');
                 // Check to see if we should be showing grouping outputs into
                 // subprojects
                 if (subprojects && subprojects !== 'false') {
@@ -259,7 +259,7 @@
                         //It'll be the last element in out div
                         div.childNodes[0].childNodes[div.childNodes[0].childNodes.length - 1].onclick = function (evt, item) {
                             var ul = div.getElementsByTagName('ul')[0];
-                            emile(ul, 'width:-100px', {duration: 300});
+                            emile(ul, 'top:-100px', {duration: 300});
                             return false;
                         };
                     });
