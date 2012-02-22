@@ -9,7 +9,7 @@ audio:not([controls]) { display: none; }
 
 html { font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 html, button, input, select, textarea { font-family: sans-serif; color: #222; }
-body { margin: 0; font-size: 1em; line-height: 1.4; }
+body { margin: 0; font-size: 1em; line-height: 1.4; padding:96px 0 0;}
 
 ::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
 ::selection { background: #fe57a1; color: #fff; text-shadow: none; }
@@ -102,11 +102,19 @@ body{ font:16px/26px Helvetica, Helvetica Neue, Arial; }
 	margin:0 5%;
 }
 
+   #header-container {
+	   margin:-220px 0 0;
+   }
+   
+   body {
+	  padding:220px 0 0; 
+   }
+
 /* ===================
     ALL: Orange Theme
    =================== */
 
-#header-container{ border-bottom: 20px solid #e44d26; }
+#header-container{ border-bottom: 20px solid #e44d26; position:fixed; width:100%; z-index:999}
 #footer-container{ border-top:    20px solid #e44d26; }
 #main aside      { border-top:    20px solid #e44d26; }
 
@@ -207,6 +215,14 @@ nav a:hover{
 /* ====================
     INTERMEDIATE: Menu
    ==================== */
+   
+	#header-container {
+	   margin:-164px 0 0;
+   }
+   
+   body {
+	  padding:164px 0 0; 
+   }
 	
 	nav a{
 		float:left;
@@ -236,6 +252,14 @@ nav a:hover{
 /* ====================
     WIDE: CSS3 Effects
    ==================== */
+   
+   #header-container {
+	   margin:-96px 0 0;
+   }
+   
+   body {
+	  padding:96px 0 0; 
+   }
 
 	#header-container,
 	#main aside{
@@ -269,6 +293,7 @@ nav a:hover{
 	#main aside{
 		float:right;
 		width:28%;
+		margin:0;
 	}
 }
 
