@@ -66,7 +66,7 @@
     function isCssReady(callback) {
         var testElem = document.createElement('span');
         testElem.id = 'development-widget-css-ready';
-        testElem.style = 'color: #fff';
+        testElem.style.color = '#fff';
         var entry = document.getElementsByTagName('script')[0];
         entry.parentNode.insertBefore(testElem, entry);
 
@@ -135,13 +135,61 @@
     
         return monkeys(template, d.createDocumentFragment());
     };
+    
+    function each(obj, iterator, context) {
+        var nativeForEach = Array.prototype.forEach,
+            breaker = {},
+            i,
+            key,
+            l;
+        if (obj === null) {
+            return;
+        }
+        if (nativeForEach && obj.forEach === nativeForEach) {
+            obj.forEach(iterator, context);
+        } else if (obj.length === +obj.length) {
+            for (i = 0, l = obj.length; i < l; i += 1) {
+                if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) {
+                    return;
+                }
+            }
+        } else {
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (iterator.call(context, obj[key], key, obj) === breaker) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
-    var scriptInfo = getScriptData();
-    var url_parser = document.createElement('a');
-        url_parser.href = scriptInfo.src;
-    var base_url = scriptInfo.src.substr(0, scriptInfo.src.lastIndexOf('/')+1);
-    var api_path = 'project';
-    var project_id = scriptInfo.project_id;
+    function map(obj, iterator, context) {
+        var results = [],
+            nativeMap = Array.prototype.map;
+        if (obj === null) {
+            return results;
+        }
+        if (nativeMap && obj.map === nativeMap) {
+            return obj.map(iterator, context);
+        }
+        each(obj, function (value, index, list) {
+            results[results.length] = iterator.call(context, value, index, list);
+        });
+        if (obj.length === +obj.length) {
+            results.length = obj.length;
+        }
+        return results;
+    }
+
+    var scriptInfo = getScriptData(),
+        url_parser = document.createElement('a'),
+        base_url = scriptInfo.src.substr(0, scriptInfo.src.lastIndexOf('/')+1),
+        api_path = 'project',
+        project_id = scriptInfo.project_id;
+    
+    // Populate out parser with our script's url
+    url_parser.href = scriptInfo.src,
 
     // Kick off by loading our stylesheet
     // Use the chromeless sheet if requested
@@ -155,36 +203,35 @@
                 // Wrap out output action in a
                 // check to ensure that our css is loaded
                 isCssReady(function(){
-                    var data = {outputs: resp.results.bindings,
-                            proj_title: resp.results.bindings[0].projectTitle.value,
-                            proj_url: resp.results.bindings[0].r4dProject.value};
-                    
-                    var template = [
-                        ['div',
-                            ['h3',
-                                "Resources from Research for Development relating to ",
-                                data.proj_title],
-                            ['div', {'class': 'list-wrapper'},
-                                ['ul',
-                                   data.outputs.map(function(item) {
-                                       return ['li',
-                                                   ['a',
-                                                       {
-                                                           'href': item.output.value,
-                                                           'target': '_blank'
-                                                       },
-                                                       item.outputTitle.value
-                                                   ]
-                                               ];
-                                   }),
+                    var div = document.createElement('div'), 
+                            data = {outputs: resp.results.bindings,
+                                proj_title: resp.results.bindings[0].projectTitle.value,
+                                proj_url: resp.results.bindings[0].r4dProject.value},
+                            template = [
+                                ['div',
+                                    ['h3',
+                                        "Resources from Research for Development relating to ",
+                                        data.proj_title],
+                                    ['div', {'class': 'list-wrapper'},
+                                        ['ul',
+                                           map(data.outputs, function (item) {
+                                                return ['li',
+                                                           ['a',
+                                                               {
+                                                                    'href': item.output.value + 'Default.aspx',
+                                                                    'target': '_blank'
+                                                                },
+                                                               item.outputTitle.value
+                                                           ]
+                                                       ];
+                                           })
+                                        ]
+                                    ],
+                                    //['a', ['span', 'And more...']]
+                                    ['br']
                                 ]
-                            ],
-                            
-                            ['a', ['span', 'And 5 more...']]
-                        ]
-                    ];
-                    
-                    var div = document.createElement('div');
+                            ];
+
                     div.className = "development-widget";
                     div.appendChild(microjungle(template));
                     // Render our stuff
