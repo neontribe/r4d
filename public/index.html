@@ -46,58 +46,46 @@
 					<h3>article section h2</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec. Curabitur posuere enim eget turpis feugiat tempor. Etiam ullamcorper lorem dapibus velit suscipit ultrices. Proin in est sed erat facilisis pharetra.</p>
 				</section>
-				<header>
-					<h3>Demo Widget</h3>
-				</header>
-				<section>
-					<p>
-						<script data-r4dw-project_id="201642"
-							ata-r4dw-chromeless="false">
-							(function() {
-								var script = document.createElement('script');
-								script.type = 'text/javascript';
-								script.async = true;
-								script.src = '/widgets/r4d.js';
-								var entry = document.getElementsByTagName('script')[0];
-								entry.parentNode.insertBefore(script, entry);
-							}());
-						</script>
-					</p>
-				</section>
 				<hr>
 				<header>
 					<h1 id="generate">Generate</h1>					
 				</header>
+
 				<section>
 					<form>
-						<ul>
-							<li>Project ID: <input type="text" size=25%/>
-							Chromeless: <input type="checkbox"/>
-							<a href="#generate"><input type="submit" value="Generate!"/></a></li>
-							<li>
-								<textarea readonly="true"></textarea>
-								<div id="clickcopy" class="b">copy to clipboard
-									<img hidden="true" class="check" src="images/checkmark.png"/>
-								</div>
-							</li>
-							<li><p id="warningTxt">Please enter a valid number.<p></li>
-						</ul>
-					</form>
+						Project ID: <input type="text" size=25% value="201642"/>
+						Chromeless: <input type="checkbox"/>
+						<input type="submit" value="Generate!"/>
+						<section id="demowidget">
+							<header>
+								<h3>Demo Widget</h3>
+							</header>
+						<div style="text-align: center"><img src="/images/loading.gif" id="loading" hidden="true"/></div>
+						<p id="scriptarea"></p>
+						<header><h3> Code </h3></header>
+						<textarea readonly="true"></textarea>
+						<div id="clickcopy" class="b">
+							copy to clipboard
+							<img hidden="true" class="check" src="images/checkmark.png"/>
+						</div>
+						</section>
+						<p id="warningTxt">Please enter a valid number.<p>
+					</form>					
 				</section>
 			</article>
 			<aside>
 				<h3>Links</h3>
 				<p>
 					<ul>
-						<li><a href="http://www.dfid.gov.uk/r4d/" target="_blank"><img src="/images/r4dtagline.png"/></a></li>
+						<li><a href="http://www.dfid.gov.uk/r4d/" target="_blank"><img src="/images/r4dtagline.png" alt="Research for Development"/></a></li>
 						<hr width=175px/>
-						<li><a href="http://www.aidtransparency.net/" target="_blank"><img src="/images/IATI.png"/></a></li>
+						<li><a href="http://www.aidtransparency.net/" target="_blank"><img src="/images/IATI.png" alt="International Aid Transparency Initiative"/></a></li>
 						<hr width=175px/>
-						<li><a href="http://kasabi.com/dataset/r4d-aid-data" target="_blank"><img src="/images/kasabi.png"/></a></li>
+						<li><a href="http://kasabi.com/dataset/r4d-aid-data" target="_blank"><img src="/images/kasabi.png" alt="Kasabi"/></a></li>
 						<hr width=175px/>
-						<li><a href="http://www.heroku.com/" target="_blank"><img src="/images/heroku.png"/></a></li>
+						<li><a href="http://www.heroku.com/" target="_blank"><img src="/images/heroku.png" alt="Heroku"/></a></li>
 						<hr width=175px/>
-						<li><a href="http://nodejs.org/" target="_blank"><img src="/images/nodejs.png"/></a></li>
+						<li><a href="http://nodejs.org/" target="_blank"><img src="/images/nodejs.png" alt="NodeJS"/></a></li>
 						<hr width=175px/>
 					</ul>
 				</p>
