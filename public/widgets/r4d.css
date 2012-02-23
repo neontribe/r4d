@@ -30,11 +30,11 @@ color:#fff !important;
 .development-widget div.list-wrapper {
     height: 200px;
     overflow: hidden;
-    position: relative;
 }
 
 .development-widget div.list-wrapper ul {
-    position: absolute;
+    top: -1px;
+    position: relative;
 }
 
 
