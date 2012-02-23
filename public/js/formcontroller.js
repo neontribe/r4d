@@ -1,11 +1,11 @@
 var widgetTemplate,
 	minifiedWidget; //global variable holding the template for the widget
 
-onload(); //run these commands when the javascript loads
-function onload(){
-	$('#warningTxt').hide('fast'); //hide elements that aren't meant to show on script load. 
-	$('textarea').hide('fast');
-	$('#demowidget').hide('fast');
+//run these commands when the javascript loads
+(function onload(){
+	$('#warningTxt').hide(); //hide elements that aren't meant to show on script load. 
+	$('textarea').hide();
+	$('#demowidget').hide();
 	$('div.b').hide();
 	widgetTemplate = //properly formatted template
 		"<script data-r4dw-project_id='{ID}' data-r4dw-chromeless='{CHROME}'>" +
@@ -19,7 +19,8 @@ function onload(){
 		"\n\t}());" +
 		"\n</script>";
 	minifiedWidget = "(function() {var script = document.createElement('script');script.type = 'text/javascript';script.async = true;script.src = '{HOST}/widgets/r4d.js';var entry = document.getElementsByTagName('script')[0];entry.parentNode.insertBefore(script, entry);}());";
-}
+})();
+
 function template(src, data){
 	//console.log(swap.length);
 	$.each(data, function(k,v){
@@ -27,6 +28,7 @@ function template(src, data){
 	});
 	return src;
 }
+
 $(document).on('focus', 'textarea', function(){ //function controlling what to do when the textarea gains focus
 	$this=$(this);
 	$this.select();
@@ -57,8 +59,14 @@ $(document).on('submit', 'form', function(evt){ //function controlling the widge
 		$('div.b').hide('fast');
 		//show/hide and re-colour elements. 
 		$('#demowidget').show('slow', function(){
+		    /**
+		     * Manually remove any r4d styles from the page to work around 
+		     * issues when regenerating chromed/chromeless widgets
+		     */
 			$('#loading').show();
 			$('#scriptarea').hide();
+			$('link[rel="stylesheet"][href*="r4d.css"]').remove();
+		    $('link[rel="stylesheet"][href*="r4d_chromeless.css"]').remove();
 			setTimeout("$('#loading').hide('slow')", 1000);
 			setTimeout("$('#scriptarea').show('slow')", 1010);
 			setTimeout("displayGeneratedCode()", 1500);
@@ -92,7 +100,7 @@ function displayGeneratedCode(){
 function createDemo(projectID, chromeless, host){
 	var widget = document.createElement('script');
 	widget.setAttribute('data-r4dw-project_id',projectID);
-	widget.setAttribute('ata-r4dw-chromeless',chromeless);
+	widget.setAttribute('data-r4dw-chromeless',chromeless);
 	widget.innerHTML=template(minifiedWidget, {"HOST": host});
 	return widget;
 }

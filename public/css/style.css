@@ -48,7 +48,7 @@ svg:not(:root) { overflow: hidden; }
 figure { margin: 0; }
 
 form { margin: 0; position:relative; }
-form p{ color:red; font-weight:bold;}
+form p#warningTxt { color:red; font-weight:bold;}
 fieldset { border: 0; margin: 0; padding: 0; }
 label { cursor: pointer; }
 legend { border: 0; *margin-left: -7px; padding: 0; white-space: normal; }

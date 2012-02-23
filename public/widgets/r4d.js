@@ -71,7 +71,7 @@
         entry.parentNode.insertBefore(testElem, entry);
 
         (function poll() {
-            var node = document.getElementById('css-ready');
+            var node = document.getElementById('development-widget-css-ready');
             if (window.getComputedStyle) {
                 value = document.defaultView
                     .getComputedStyle(testElem, null)
@@ -85,7 +85,7 @@
             {
                 callback();
             } else {
-                setTimeout(poll, 500);
+                setTimeout(poll, 200);
             }
         }());
     }
