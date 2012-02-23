@@ -81,7 +81,7 @@
                 value = node.currentStyle['color'];
             }
             if (value && value === 'rgb(186, 218, 85)' ||
-                value.lower() === '#bada55')
+                value.toLowerCase() === '#bada55')
             {
                 callback();
             } else {
@@ -227,8 +227,8 @@
                                            })
                                         ]
                                     ],
-                                    //['a', ['span', 'And more...']]
-                                    ['br']
+                                    ['a', ['span', '&#x25bc;']]
+                                    //['br']
                                 ]
                             ];
 
@@ -242,9 +242,33 @@
                     loadScript(base_url + "emile.js", function(){
                         // Deal with clicks on the scroller
                         //It'll be the last element in out div
+                        var newTop = -200,
+                            increment = -200;
                         div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -1].onclick = function (evt, item) {
                             var ul = div.getElementsByTagName('ul')[0];
-                            emile(ul, 'width:-100px', {duration: 300});
+                                
+                            if (ul.style.top) {
+                                newTop = parseInt(ul.style.top, 10) + increment;
+                            }
+
+                            emile(
+                                ul, 
+                                'top:' + newTop.toString() + 'px', 
+                                {
+                                    duration: 600,
+                                    easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
+                                    after: function(){ 
+                                        if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
+                                            evt.target.innerHTML = '&#x25b2';
+                                            increment = 200;
+                                        }
+                                        if (Math.abs(newTop) <= 0) {
+                                            evt.target.innerHTML = '&#x25bc';
+                                            increment = -200;
+                                        }
+                                    }
+                                }
+                            );
                             return false;
                         }
                     });

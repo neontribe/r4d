@@ -29,11 +29,12 @@ color:#fff !important;
 
 .development-widget div.list-wrapper {
     height: 200px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .development-widget div.list-wrapper ul {
-    
+    top: -1px;
+    position: relative;
 }
 
 
