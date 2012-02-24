@@ -21,9 +21,10 @@
 		"\n\t\tentry.parentNode.insertBefore(script, entry);"+	
 		"\n\t}());" +
 		"\n</script>";
+		//minified widget template for insertion into the example template
 	minifiedWidget = "(function() {var script = document.createElement('script');script.type = 'text/javascript';script.async = true;script.src = '{HOST}/widgets/r4d.js';var entry = document.getElementsByTagName('script')[0];entry.parentNode.insertBefore(script, entry);}());";
 
-	function template(src, data){
+	function template(src, data){ //my templating language
 		//console.log(swap.length);
 		$.each(data, function(k,v){
 			src = src.split("{" + k + "}").join(v);
@@ -31,7 +32,7 @@
 		return src;
 	}
 
-	function createDemo(projectID, chromeless, host){
+	function createDemo(projectID, chromeless, host){ //this is a required work-around to allow insertion of script elelment
 		var widget = document.createElement('script');
 		widget.setAttribute('data-r4dw-project_id',projectID);
 		widget.setAttribute('data-r4dw-chromeless',chromeless);
@@ -40,7 +41,7 @@
 		isWidgetLoaded(widgetLoaded);
 	}
 
-	function isWidgetLoaded(callback){
+	function isWidgetLoaded(callback){ //polling to check whether the widget has loaded
 		(function poll() {
 			var node = $('div[class=development-widget]');
 			console.log(node);
@@ -52,7 +53,7 @@
 		}());
 	}
 
-	function widgetLoaded(){
+	function widgetLoaded(){ // to be executed only after the objects have been loaded and are at a final location
 		$('.load').hide('slow', function(){
 			$('textarea').show('fast', function(){
 				$('div.b').css('background-color', '#707070').show(0, function(){
@@ -62,7 +63,7 @@
 		});
 	}
 
-	function applyzClip(){
+	function applyzClip(){ //function to add the invisible flash element to the object
 		$('div.b').zclip('remove');
 		$('div.b').zclip({								// the div needs to exist, on page load
 			path:'js/ZeroClipboard.swf',
@@ -76,11 +77,11 @@
 	}
 
 	$(document).on('focus', 'textarea', function(){ //function controlling what to do when the textarea gains focus
-		$this=$(this);
-		$this.select();
-		$this.mouseup(function() { //fix for chrome's little problem
+		var self=$(this);
+		self.select();
+		self.mouseup(function() { //fix for chrome's little problem
 			//prevent further mousup intervention
-			$this.unbind("mouseup");
+			self.unbind("mouseup");
 			return false;
 		});
 	});
