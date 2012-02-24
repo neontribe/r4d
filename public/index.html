@@ -56,19 +56,17 @@
 						Project ID: <input type="text" size=25% value="201642"/>
 						Chromeless: <input type="checkbox"/>
 						<input type="submit" value="Generate!"/>
-						<section id="demowidget">
-							<header>
-								<h3>Demo Widget</h3>
-							</header>
-						<div style="text-align: center"><img src="/images/loading.gif" id="loading" hidden="true"/></div>
-						<p id="scriptarea"></p>
-						<header><h3> Code </h3></header>
-						<textarea readonly="true"></textarea>
-						<div id="clickcopy" class="b">
+						<header class="demowidget">
+							<h3>Demo Widget</h3>
+						</header>
+						<div style="text-align: center"><img src="/images/loading.gif" id="loading" class="load"/></div>
+						<p id="scriptarea" class="demowidget"></p>
+						<header class="code"><h3> Code </h3></header>
+						<textarea readonly="true" class="code"></textarea>
+						<div id="clickcopy" class="b code">
 							copy to clipboard
-							<img hidden="true" class="check" src="images/checkmark.png"/>
+							<img class="check" src="images/checkmark.png"/>
 						</div>
-						</section>
 						<p id="warningTxt">Please enter a valid number.<p>
 					</form>					
 				</section>
