@@ -197,7 +197,7 @@
     //Grab reqwest and the dispatch a request for our data
     loadScript(base_url + "reqwest.js", function(){
         reqwest({
-            url: [url_parser.protocol +  '/', url_parser.host, api_path, project_id].join('/'),
+            url: [url_parser.protocol +  '/', url_parser.host, api_path, project_id, '?breaker=' + new Date().getTime()].join('/'),
             type: 'jsonp',
             success: function (resp) {
                 // Wrap out output action in a
