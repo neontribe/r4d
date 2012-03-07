@@ -237,12 +237,12 @@
                                            })
                                         ]
                                     ],
-                                    ['a', {}, '&#x25bc;'],
+                                    ['a', {'href': 'javascript:void(0);'}, '&#x25bc;/&#x25b2;'],
                                     ['div', {'class': 'clear'}]
                                     //['br']
                                 ]
                             ];
-
+                    
                     div.className = "development-widget";
                     div.appendChild(microjungle(template));
                     // Render our stuff
@@ -258,7 +258,12 @@
                             animating = false,
                             button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
                             
-                        addEvent(button, 'click', function (evt, item) {
+                        //replace the updown arrow on browsers where we can (like all but ie 7/8
+                        try {button.innerHTML = '<span></span>&#x25bc';}
+                        catch (err){}
+
+
+                        addEvent(button, 'click', function (evt) {
                             var ul = div.getElementsByTagName('ul')[0];
 
                             if (!animating) {
@@ -275,11 +280,13 @@
                                         easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
                                         after: function(){ 
                                             if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                                evt.target.innerHTML = '&#x25b2';
+                                                try {button.innerHTML = '<span></span>&#x25b2';}
+                                                catch (err) {}
                                                 increment = 200;
                                             }
                                             if (Math.abs(newTop) <= 0) {
-                                                evt.target.innerHTML = '&#x25bc';
+                                                try {button.innerHTML = '<span></span>&#x25bc;';}
+                                                catch (err) {}
                                                 increment = -200;
                                             }
                                         }

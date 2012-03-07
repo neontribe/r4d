@@ -36,7 +36,7 @@
 		var widget = document.createElement('script');
 		widget.setAttribute('data-r4dw-project_id',projectID);
 		widget.setAttribute('data-r4dw-chromeless',chromeless);
-		widget.innerHTML=template(minifiedWidget, {"HOST": host});
+		widget.text = template(minifiedWidget, {"HOST": host});
 		document.getElementById('scriptarea').appendChild(widget);
 		isWidgetLoaded(widgetLoaded);
 	}
@@ -44,7 +44,7 @@
 	function isWidgetLoaded(callback){ //polling to check whether the widget has loaded
 		(function poll() {
 			var node = $('div[class=development-widget]');
-			console.log(node);
+			//console.log(node);
 			if (node){
 				callback();
 			} else {
@@ -56,9 +56,10 @@
 	function widgetLoaded(){ // to be executed only after the objects have been loaded and are at a final location
 		$('.load').hide('slow', function(){
 			$('textarea').show('fast', function(){
-				$('div.b').css('background-color', '#707070').show(0, function(){
-					applyzClip();
-				});
+				//$('div.b').css('background-color', '#707070').show(0, function(){
+					//dont do this as it is not ie7/8 compatable use this as quick turn off
+                    //applyzClip();
+				//});
 			});
 		});
 	}

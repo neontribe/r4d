@@ -52,7 +52,7 @@ background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,
 }
 
 .development-widget div > a {
-display:block !important;
+display:inline !important;
 float: right;
 text-align:right !important;
 text-decoration:none !important;
