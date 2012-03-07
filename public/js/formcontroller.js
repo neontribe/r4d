@@ -11,7 +11,7 @@
 	$('#warningTxt').hide().css('display').remove;
 	$('.check').hide().css('display').remove;
 	widgetTemplate = //properly formatted template
-		"<script data-r4dw-project_id='{ID}' data-r4dw-chromeless='{CHROME}'>" +
+		"<script type='text/javascript' data-r4dw-project_id='{ID}' data-r4dw-chromeless='{CHROME}'>" +
 		"\n\t(function() {" + 
 		"\n\t\tvar script = document.createElement('script');" + 
 		"\n\t\tscript.type = 'text/javascript';"+
