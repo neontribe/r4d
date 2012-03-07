@@ -181,6 +181,16 @@
         }
         return results;
     }
+    
+    function addEvent(el, ev, fn) {
+        if (el.addEventListener) {
+            el.addEventListener(ev, fn, false);
+        } else if (el.attachEvent) {
+            el.attachEvent('on' + ev, fn);
+        } else {
+            el['on' + ev] = fn;
+        }
+    }
 
     var scriptInfo = getScriptData(),
         url_parser = document.createElement('a'),
@@ -245,9 +255,10 @@
                         //It'll be the last element in out div
                         var newTop = -200,
                             increment = -200,
-                            animating = false;
+                            animating = false,
+                            button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
                             
-                        div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2].onclick = function (evt, item) {
+                        addEvent(button, 'click', function (evt, item) {
                             var ul = div.getElementsByTagName('ul')[0];
 
                             if (!animating) {
@@ -278,7 +289,7 @@
                                 
                             }
                             return false;
-                        }
+                        });
                     });
                 });
             }
