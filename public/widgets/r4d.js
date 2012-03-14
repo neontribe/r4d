@@ -215,13 +215,14 @@
                 isCssReady(function(){
                     var div = document.createElement('div'), 
                             data = {outputs: resp.results.bindings,
-                                proj_title: resp.results.bindings[0].projectTitle.value,
+                                proj_title: resp.results.bindings[0].dfidProjectTitle.value,
                                 proj_url: resp.results.bindings[0].r4dProject.value},
                             template = [
                                 ['div',
                                     ['h3',
                                         "Resources from Research for Development relating to ",
-                                        data.proj_title],
+                                        ['em', data.proj_title]
+                                    ],
                                     ['div', {'class': 'list-wrapper'},
                                         ['ul',
                                            map(data.outputs, function (item) {
