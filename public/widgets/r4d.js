@@ -215,7 +215,7 @@
                 isCssReady(function(){
                     var div = document.createElement('div'), 
                             data = {outputs: resp.results.bindings,
-                                proj_title: resp.results.bindings[0].dfidProjectTitle.value,
+                                proj_title: resp.results.bindings[0].dfidProjectTitle ? resp.results.bindings[0].dfidProjectTitle.value : resp.results.bindings[0].projectTitle.value,
                                 proj_url: resp.results.bindings[0].r4dProject.value},
                             template = [
                                 ['div',
