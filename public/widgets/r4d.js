@@ -206,34 +206,49 @@
                     var div = document.createElement('div'), 
                             data = {outputs: resp.results.bindings,
                                 proj_title: resp.results.bindings[0].projectTitle.value,
-                                proj_url: resp.results.bindings[0].r4dProject.value},
-                            template = [
-                                ['div',
-                                    ['h3',
-                                        "Resources from Research for Development relating to ",
-                                        data.proj_title],
-                                    ['div', {'class': 'list-wrapper'},
-                                        ['ul',
-                                           map(data.outputs, function (item) {
-                                                return ['li',
-                                                           ['a',
-                                                               {
-                                                                    'href': item.output.value + 'Default.aspx',
-                                                                    'target': '_blank'
-                                                                },
-                                                               item.outputTitle.value
-                                                           ]
-                                                       ];
-                                           })
-                                        ]
-                                    ],
-                                    ['a', ['span', '&#x25bc;']]
-                                    //['br']
-                                ]
-                            ];
+                                proj_url: resp.results.bindings[0].r4dProject.value};
+                            //template = [
+                            //    ['div',
+                            //        ['h3',
+                            //            "Resources from Research for Development relating to ",
+                            //            data.proj_title],
+                            //        ['div', {'class': 'list-wrapper'},
+                            //            ['ul',
+                            //               map(data.outputs, function (item) {
+                            //                    return ['li',
+                            //                               ['a',
+                            //                                   {
+                            //                                        'href': item.output.value + 'Default.aspx',
+                            //                                        'target': '_blank'
+                            //                                    },
+                            //                                   item.outputTitle.value
+                            //                               ]
+                            //                           ];
+                            //               })
+                            //            ]
+                            //        ],
+                            //        ['a', ['span', '&#x25bc;']]
+                            //        //['br']
+                            //    ]
+                            //];
+                    var markup = "";
+                    markup += "<div>";
+                    markup += "<h3>Resources from Research for Development relating to " + data.proj_title + "</h3>";
+                    markup += '<div class="list-wrapper">';
+                    markup += "<ul>";
+                    each(data.outputs, function(item){
+                        markup += '<li>';
+                        markup += '<a href="' + item.output.value + 'Default.aspx" target="_blank">' + item.outputTitle.value + '</a>';
+                        markup += '</li>';
+                    });
+                    markup += "</ul>";
+                    markup += "</div>";
+                    markup += "<a><span>&#x25bc</span></a>";
+                    markup += "</div>";
 
                     div.className = "development-widget";
-                    div.appendChild(microjungle(template));
+                    //div.appendChild(microjungle(template));
+                    div.innerHTML = markup;
                     // Render our stuff
                     scriptInfo.initial_script.parentNode.insertBefore(div, scriptInfo.initial_script);
                     

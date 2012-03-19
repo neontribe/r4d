@@ -7,7 +7,12 @@ var http = require("http")
     ,kasabi_api_key = "368389391f29f9442406b400a42e1dfd6eaacb22"
     ,kasabi_host = "api.kasabi.com"
     ,kasabi_path = "/dataset/r4d-aid-data/apis/sparql"
-    ,sparql;
+    ,redis_cache_ttl = 1
+    ,redis_cache_prefix = "r4dProjectCache:"
+    ,sparql
+    ,redis
+    ,rtg;
+
     
 /**
  * Precompile our sparql request template and store it
