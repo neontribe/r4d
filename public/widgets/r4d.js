@@ -90,51 +90,7 @@
         }());
     }
     
-    /**
-     * Templating!
-     * https://github.com/deepsweet/microjungle
-     */
-    var microjungle = function(template) {
-        var d = document;
     
-        // they just doing their job.
-        function monkeys(what, who) {
-            var l = what.length;
-    
-            for (var i = 0; i < l; i++) {
-                var j = what[i];
-    
-                if (j) {
-                    if (typeof j == 'string') {
-                        //who.appendChild(d.createTextNode(j));
-                        who.innerHTML += j;
-                    } else {
-                        if (typeof j[0] == 'string') {
-                            var el = d.createElement(j.shift()),
-                                attrs = {}.toString.call(j[0]) === '[object Object]' && j.shift(),
-                                k;
-    
-                            if (attrs) {
-                                for(k in attrs) {
-                                    attrs[k] && el.setAttribute(k, attrs[k]);
-                                }
-                            }
-    
-                            who.appendChild(monkeys(j, el));
-                        } else if (j.nodeType === 11) {
-                            who.appendChild(j);
-                        } else {
-                            monkeys(j, who);
-                        }
-                    }
-                }
-            }
-    
-            return who;
-        };
-    
-        return monkeys(template, d.createDocumentFragment());
-    };
     
     function each(obj, iterator, context) {
         var nativeForEach = Array.prototype.forEach,
@@ -203,7 +159,7 @@
 
     // Kick off by loading our stylesheet
     // Use the chromeless sheet if requested
-    loadStylesheet(base_url + "r4dsdfgsfgsfg" + (scriptInfo.chromeless ? "_chromeless" : "") + ".css");
+    loadStylesheet(base_url + "r4d" + (scriptInfo.chromeless ? "_chromeless" : "") + ".css");
     //Grab reqwest and the dispatch a request for our data
     loadScript(base_url + "reqwest.js", function(){
         reqwest({
@@ -213,35 +169,13 @@
                 // Wrap out output action in a
                 // check to ensure that our css is loaded
                 isCssReady(function(){
-                    var div = document.createElement('div'), 
+                    var div = document.createElement('div'),
+                            markup,
                             data = {outputs: resp.results.bindings,
                                 proj_title: resp.results.bindings[0].projectTitle.value,
                                 proj_url: resp.results.bindings[0].r4dProject.value};
-                            //template = [
-                            //    ['div',
-                            //        ['h3',
-                            //            "Resources from Research for Development relating to ",
-                            //            data.proj_title],
-                            //        ['div', {'class': 'list-wrapper'},
-                            //            ['ul',
-                            //               map(data.outputs, function (item) {
-                            //                    return ['li',
-                            //                               ['a',
-                            //                                   {
-                            //                                        'href': item.output.value + 'Default.aspx',
-                            //                                        'target': '_blank'
-                            //                                    },
-                            //                                   item.outputTitle.value
-                            //                               ]
-                            //                           ];
-                            //               })
-                            //            ]
-                            //        ],
-                            //        ['a', ['span', '&#x25bc;']]
-                            //        //['br']
-                            //    ]
-                            //];
-                    var markup = "";
+                                
+                    markup = "";
                     markup += "<div>";
                     markup += "<h3>Resources from Research for Development relating to <em>" + data.proj_title + "</em></h3>";
                     markup += '<div class="list-wrapper">';
@@ -253,13 +187,12 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += '<a href="javascript:void(0);">DOWN</a>';
+                    markup += '<a href="javascript:void(0);">&#x25bc;</a>';
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
                     console.log(markup);
                     div.className = "development-widget";
-                    //div.appendChild(microjungle(template));
                     div.innerHTML = markup;
                     
                     // Render our stuff
@@ -293,12 +226,12 @@
                                         easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
                                         after: function(){ 
                                             if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                                try {button.innerHTML = 'UP';}
+                                                try {button.innerHTML = '&#x25b2;';}
                                                 catch (err) {}
                                                 increment = 200;
                                             }
                                             if (Math.abs(newTop) <= 0) {
-                                                try {button.innerHTML = 'DOWN';}
+                                                try {button.innerHTML = '&#x25bc;';}
                                                 catch (err) {}
                                                 increment = -200;
                                             }
