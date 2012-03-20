@@ -1,1 +1,14 @@
-apikey=<%= kasabi_api_key %>&output=json&query=PREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+dc%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%0D%0A%0D%0A%0D%0ASELECT+*+WHERE+%7B%0D%0A++%23+Substitute+in+your+own+project+URI+from+projects.dfid.gov.uk+here...%0D%0A+++%3Fr4dProject+dc%3Aidentifier+%3Chttp%3A%2F%2Fprojects.dfid.gov.uk%2Fproject.aspx%3FProject%3D<%= prid %>%3E.+%0D%0A+++%3Fr4dProject+dc%3Atitle+%3FprojectTitle.%0D%0A+++%3Foutput+dcterms%3AisPartOf+%3Fr4dProject.%0D%0A+++%3Foutput+dc%3Atitle+%3FoutputTitle.%0D%0A++OPTIONAL+%7B%3Foutput+dc%3Acreator+%3FoutputCreator.%7D%0D%0A++OPTIONAL+%7B%3Foutput+dc%3Adescription+%3FoutputDescription.+%7D%0D%0A++%3Foutput+dc%3Adate+%3FoutputDate.%0D%0A%0D%0A%7D+LIMIT+10
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT * WHERE 
+{  # Substitute in your own project URI from projects.dfid.gov.uk here...   
+  ?r4dProject dc:identifier <http://projects.dfid.gov.uk/project.aspx?Project=<%= prid %>>.    
+  ?r4dProject dc:title ?projectTitle.      
+  ?output dcterms:isPartOf ?r4dProject.   
+  ?output dc:title ?outputTitle.  
+  OPTIONAL {?output dc:creator ?outputCreator.}  
+  OPTIONAL {?output dc:description ?outputDescription. }
+  OPTIONAL {<http://data.kasabi.com/dataset/iati/activity/GB-1-<%= prid %>> dc:title ?dfidProjectTitle. }
+  ?output dc:date ?outputDate.
+} LIMIT 200

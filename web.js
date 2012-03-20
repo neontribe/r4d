@@ -14,6 +14,16 @@ var http = require("http")
     ,rtg;
 
     
+if (process.env.REDISTOGO_URL) {
+    // get redistogo on heroku
+    rtg = require("url").parse(process.env.REDISTOGO_URL);
+    redis = require("redis").createClient(rtg.port, rtg.hostname);
+    redis.auth(rtg.auth.split(":")[1]);
+} else {
+    // Get localhost redis
+    redis = require('redis').createClient();
+}
+
 /**
  * Precompile our sparql request template and store it
  */
@@ -29,40 +39,68 @@ connect(
     // create a router to handle application paths
     connect.router(function(app) {
         app.get("/project/:prid", function(req, res) {
-        
-            var query = ejs.render(sparql, {
-                    prid : req.params.prid,
-                    kasabi_api_key : kasabi_api_key
-                }),
-                opts = {
-                    host : kasabi_host,
-                    path : kasabi_path + '?' + query,
-                    port : "80"
-                },
+            var cached,
+                squery,
+                query,
+                opts,
                 req_params = querystring.parse(req.url.split("?")[1]);
 
-            http.get(opts, function(response){
-                var results = '';
-                response.on('data', function(chunk) {
-                    results += chunk;  
+            function respond(data) {
+                //accept jsonp requests
+                if (req_params.callback) {
+                // if we have a callback function name, do JSONP
+                    data = req_params.callback + "(" + data + ");";
+                } 
+                // write the results to the output
+                res.writeHead(200, {
+                    // change MIME type to JSON
+                    "Content-Type": (req_params.callback) ? "application/javascript" :"application/json"
                 });
-                response.on('end', function(){
-                    //accept jsonp requests
-                    if (req_params.callback) {
-                    // if we have a callback function name, do JSONP
-                        results = req_params.callback + "(" + results + ");";
-                    } 
-
-                    // write the results to the output
-                    res.writeHead(200, {
-                        // change MIME type to JSON
-                        "Content-Type": (req_params.callback) ? "application/javascript" :"application/json",
-                        "Content-Length": results.length
-                    });
-
-                    res.end(results)
-                });
+                res.end(data);
+            }
+            
+            // Look for a copy in cache
+            redis.get(redis_cache_prefix + req.params.prid, function(err, data){
+                if (data) {
+                    console.log('responding with cached data');
+                    respond(data);
+                } else {
+                    squery = encodeURIComponent(ejs.render(sparql, {
+                        prid : req.params.prid
+                    })).replace(/%20/g, '+');
+                    query = "apikey=" + kasabi_api_key + "&output=json&query=";
+                    opts = {
+                        host : kasabi_host,
+                        path : kasabi_path + '?' + query + squery,
+                        port : "80"
+                    };
+        
+                    http.get(opts, function(response){
+                        var results = '';
+                        response.on('data', function(chunk) {
+                            results += chunk;
+                        });
+                        response.on('end', function(){
+                            console.log('responding with fresh data');
+                            respond(results);
+                            // Write to the cache
+                            console.log('writing to cache');
+                            redis.set(redis_cache_prefix + req.params.prid, results, function(){
+                                console.log('setting expiry');
+                                redis.expire(redis_cache_prefix + req.params.prid, redis_cache_ttl, function(err, ok){
+                                    if (ok) {
+                                        console.log('Expiry set ok');   
+                                    } else {
+                                        console.log('Expiry set failed:' + err);
+                                    }
+                                });
+                            });
+  
+                        });
+                    }); 
+                }
             });
+ 
         });
     })
 ).listen(port);

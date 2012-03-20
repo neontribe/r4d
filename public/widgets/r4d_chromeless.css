@@ -18,6 +18,16 @@ background:transparent !important;
 vertical-align: baseline !important;
 }
 
+.development-widget div.list-wrapper {
+    height: 200px;
+    overflow: hidden;
+}
+
+.development-widget div.list-wrapper ul {
+    top: -1px;
+    position: relative;
+}
+
 .development-widget div ul {
 padding:10px 0 !important;
 }

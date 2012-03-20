@@ -71,7 +71,7 @@
         entry.parentNode.insertBefore(testElem, entry);
 
         (function poll() {
-            var node = document.getElementById('css-ready');
+            var node = document.getElementById('development-widget-css-ready');
             if (window.getComputedStyle) {
                 value = document.defaultView
                     .getComputedStyle(testElem, null)
@@ -85,7 +85,7 @@
             {
                 callback();
             } else {
-                setTimeout(poll, 500);
+                setTimeout(poll, 200);
             }
         }());
     }
@@ -181,6 +181,16 @@
         }
         return results;
     }
+    
+    function addEvent(el, ev, fn) {
+        if (el.addEventListener) {
+            el.addEventListener(ev, fn, false);
+        } else if (el.attachEvent) {
+            el.attachEvent('on' + ev, fn);
+        } else {
+            el['on' + ev] = fn;
+        }
+    }
 
     var scriptInfo = getScriptData(),
         url_parser = document.createElement('a'),
@@ -193,11 +203,11 @@
 
     // Kick off by loading our stylesheet
     // Use the chromeless sheet if requested
-    loadStylesheet(base_url + "r4d" + (scriptInfo.chromeless ? "_chromeless" : "") + ".css");
+    loadStylesheet(base_url + "r4dsdfgsfgsfg" + (scriptInfo.chromeless ? "_chromeless" : "") + ".css");
     //Grab reqwest and the dispatch a request for our data
     loadScript(base_url + "reqwest.js", function(){
         reqwest({
-            url: [url_parser.protocol +  '/', url_parser.host, api_path, project_id].join('/'),
+            url: [url_parser.protocol +  '/', url_parser.host, api_path, project_id, '?breaker=' + new Date().getTime()].join('/'),
             type: 'jsonp',
             success: function (resp) {
                 // Wrap out output action in a
@@ -233,7 +243,7 @@
                             //];
                     var markup = "";
                     markup += "<div>";
-                    markup += "<h3>Resources from Research for Development relating to " + data.proj_title + "</h3>";
+                    markup += "<h3>Resources from Research for Development relating to <em>" + data.proj_title + "</em></h3>";
                     markup += '<div class="list-wrapper">';
                     markup += "<ul>";
                     each(data.outputs, function(item){
@@ -243,12 +253,15 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += "<a><span>&#x25bc</span></a>";
+                    markup += '<a href="javascript:void(0);">DOWN</a>';
+                    markup += '<div class="clear"></div>';
                     markup += "</div>";
 
+                    console.log(markup);
                     div.className = "development-widget";
                     //div.appendChild(microjungle(template));
                     div.innerHTML = markup;
+                    
                     // Render our stuff
                     scriptInfo.initial_script.parentNode.insertBefore(div, scriptInfo.initial_script);
                     
@@ -258,34 +271,45 @@
                         // Deal with clicks on the scroller
                         //It'll be the last element in out div
                         var newTop = -200,
-                            increment = -200;
-                        div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -1].onclick = function (evt, item) {
-                            var ul = div.getElementsByTagName('ul')[0];
-                                
-                            if (ul.style.top) {
-                                newTop = parseInt(ul.style.top, 10) + increment;
-                            }
+                            increment = -200,
+                            animating = false,
+                            button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
 
-                            emile(
-                                ul, 
-                                'top:' + newTop.toString() + 'px', 
-                                {
-                                    duration: 600,
-                                    easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
-                                    after: function(){ 
-                                        if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                            evt.target.innerHTML = '&#x25b2';
-                                            increment = 200;
-                                        }
-                                        if (Math.abs(newTop) <= 0) {
-                                            evt.target.innerHTML = '&#x25bc';
-                                            increment = -200;
-                                        }
-                                    }
+
+                        addEvent(button, 'click', function (evt) {
+                            var ul = div.getElementsByTagName('ul')[0];
+
+                            if (!animating) {
+                                animating = true;
+                                if (ul.style.top) {
+                                    newTop = parseInt(ul.style.top, 10) + increment;
                                 }
-                            );
+                                
+                                emile(
+                                    ul, 
+                                    'top:' + newTop.toString() + 'px', 
+                                    {
+                                        duration: 600,
+                                        easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
+                                        after: function(){ 
+                                            if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
+                                                try {button.innerHTML = 'UP';}
+                                                catch (err) {}
+                                                increment = 200;
+                                            }
+                                            if (Math.abs(newTop) <= 0) {
+                                                try {button.innerHTML = 'DOWN';}
+                                                catch (err) {}
+                                                increment = -200;
+                                            }
+                                        }
+                                    },
+                                    function () { animating = false; }
+                                );
+                                
+                            }
                             return false;
-                        }
+                        });
                     });
                 });
             }
