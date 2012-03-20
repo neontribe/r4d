@@ -187,7 +187,7 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += '<a href="javascript:void(0);">&#x25bc;</a>';
+                    markup += '<a href="javascript:void(0);">&#x25bc;/&#x25b2;</a>';
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
@@ -207,7 +207,13 @@
                             increment = -200,
                             animating = false,
                             button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
-
+                        try {
+                            button.innerHTML = '&#x25bc;';
+                        } catch (e) {
+                            // Looks like we're in IE 7
+                            // Tempting to just give up...
+                        }
+                        
 
                         addEvent(button, 'click', function (evt) {
                             var ul = div.getElementsByTagName('ul')[0];
@@ -226,13 +232,19 @@
                                         easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
                                         after: function(){ 
                                             if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                                try {button.innerHTML = '&#x25b2;';}
-                                                catch (err) {}
+                                                try {
+                                                    button.innerHTML = '&#x25b2;';
+                                                } catch (e) {
+                                                    // sigh IE7
+                                                }
                                                 increment = 200;
                                             }
                                             if (Math.abs(newTop) <= 0) {
-                                                try {button.innerHTML = '&#x25bc;';}
-                                                catch (err) {}
+                                                try {
+                                                    button.innerHTML = '&#x25bc;';
+                                                } catch (e) {
+                                                    // sigh IE7
+                                                }
                                                 increment = -200;
                                             }
                                         }
