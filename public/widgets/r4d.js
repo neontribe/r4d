@@ -90,51 +90,7 @@
         }());
     }
     
-    /**
-     * Templating!
-     * https://github.com/deepsweet/microjungle
-     */
-    var microjungle = function(template) {
-        var d = document;
     
-        // they just doing their job.
-        function monkeys(what, who) {
-            var l = what.length;
-    
-            for (var i = 0; i < l; i++) {
-                var j = what[i];
-    
-                if (j) {
-                    if (typeof j == 'string') {
-                        //who.appendChild(d.createTextNode(j));
-                        who.innerHTML += j;
-                    } else {
-                        if (typeof j[0] == 'string') {
-                            var el = d.createElement(j.shift()),
-                                attrs = {}.toString.call(j[0]) === '[object Object]' && j.shift(),
-                                k;
-    
-                            if (attrs) {
-                                for(k in attrs) {
-                                    attrs[k] && el.setAttribute(k, attrs[k]);
-                                }
-                            }
-    
-                            who.appendChild(monkeys(j, el));
-                        } else if (j.nodeType === 11) {
-                            who.appendChild(j);
-                        } else {
-                            monkeys(j, who);
-                        }
-                    }
-                }
-            }
-    
-            return who;
-        };
-    
-        return monkeys(template, d.createDocumentFragment());
-    };
     
     function each(obj, iterator, context) {
         var nativeForEach = Array.prototype.forEach,
@@ -213,39 +169,32 @@
                 // Wrap out output action in a
                 // check to ensure that our css is loaded
                 isCssReady(function(){
-                    var div = document.createElement('div'), 
+                    var div = document.createElement('div'),
+                            markup,
                             data = {outputs: resp.results.bindings,
-                                proj_title: resp.results.bindings[0].dfidProjectTitle ? resp.results.bindings[0].dfidProjectTitle.value : resp.results.bindings[0].projectTitle.value,
-                                proj_url: resp.results.bindings[0].r4dProject.value},
-                            template = [
-                                ['div',
-                                    ['h3',
-                                        "Resources from Research for Development relating to ",
-                                        ['em', data.proj_title]
-                                    ],
-                                    ['div', {'class': 'list-wrapper'},
-                                        ['ul',
-                                           map(data.outputs, function (item) {
-                                                return ['li',
-                                                           ['a',
-                                                               {
-                                                                    'href': item.output.value + 'Default.aspx',
-                                                                    'target': '_blank'
-                                                                },
-                                                               item.outputTitle.value
-                                                           ]
-                                                       ];
-                                           })
-                                        ]
-                                    ],
-                                    ['a', {'href': 'javascript:void(0);'}, '&#x25bc;/&#x25b2;'],
-                                    ['div', {'class': 'clear'}]
-                                    //['br']
-                                ]
-                            ];
-                    
+                                proj_title: resp.results.bindings[0].projectTitle.value,
+                                proj_url: resp.results.bindings[0].r4dProject.value};
+                                
+                    markup = "";
+                    markup += "<div>";
+                    markup += "<h3>Resources from Research for Development relating to <em>" + data.proj_title + "</em></h3>";
+                    markup += '<div class="list-wrapper">';
+                    markup += "<ul>";
+                    each(data.outputs, function(item){
+                        markup += '<li>';
+                        markup += '<a href="' + item.output.value + 'Default.aspx" target="_blank">' + item.outputTitle.value + '</a>';
+                        markup += '</li>';
+                    });
+                    markup += "</ul>";
+                    markup += "</div>";
+                    markup += '<a href="javascript:void(0);">&#x25bc;</a>';
+                    markup += '<div class="clear"></div>';
+                    markup += "</div>";
+
+                    console.log(markup);
                     div.className = "development-widget";
-                    div.appendChild(microjungle(template));
+                    div.innerHTML = markup;
+                    
                     // Render our stuff
                     scriptInfo.initial_script.parentNode.insertBefore(div, scriptInfo.initial_script);
                     
@@ -258,10 +207,6 @@
                             increment = -200,
                             animating = false,
                             button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
-                            
-                        //replace the updown arrow on browsers where we can (like all but ie 7/8
-                        try {button.innerHTML = '<span></span>&#x25bc';}
-                        catch (err){}
 
 
                         addEvent(button, 'click', function (evt) {
@@ -281,12 +226,12 @@
                                         easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
                                         after: function(){ 
                                             if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                                try {button.innerHTML = '<span></span>&#x25b2';}
+                                                try {button.innerHTML = '&#x25b2;';}
                                                 catch (err) {}
                                                 increment = 200;
                                             }
                                             if (Math.abs(newTop) <= 0) {
-                                                try {button.innerHTML = '<span></span>&#x25bc;';}
+                                                try {button.innerHTML = '&#x25bc;';}
                                                 catch (err) {}
                                                 increment = -200;
                                             }
