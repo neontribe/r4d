@@ -191,7 +191,6 @@
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
-                    console.log(markup);
                     div.className = "development-widget";
                     div.innerHTML = markup;
                     
