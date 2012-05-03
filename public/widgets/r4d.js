@@ -204,8 +204,11 @@
                         // Deal with clicks on the scroller
                         // It'll be the last element in out div
 
-                        var increment = 200,
+                        var ul = div.getElementsByTagName('ul')[0],
+                            //increment = 200,
                             animating = false,
+                            currentItemIndex = 0,
+                            currentItem = ul.childNodes[currentItemIndex],
 														buttons = {
 															'up' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2],
 															'down' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -3]
@@ -219,20 +222,35 @@
                             // Tempting to just give up...
                         }
 
+                        // Reset button disabled state on resize
+                        window.onresize = function() {
+                          each(buttons, function(button) {
+                            //TODO: handle resize event
+                          });
+                        }
+
 												each(buttons, function(button) {
+                          // Initially disable up button
 													buttons.up.className = 'disabled';
 
 													addEvent(button, 'click', function (evt) {
-															var ul = div.getElementsByTagName('ul')[0],
-																	dir = (button === buttons.down) ? 'up' : 'down',
-																	inc = (button.className !== 'disabled') ? ((dir === 'up') ? (0 - increment) : (0 + increment)) : 0,
+
+                              currentItem = ul.childNodes[currentItemIndex];
+
+															var dir = (button === buttons.down) ? 'up' : 'down',
+                                  prevItem = ul.childNodes[currentItemIndex - 1],
+                                  nextItem = ul.childNodes[currentItemIndex + 1],
+                                  inc = (button.className !== 'disabled') ? ( (dir === 'up') ? -currentItem.offsetHeight : ( (prevItem) ? prevItem.offsetHeight : 0 ) ) : 0,
 																	newTop = inc;
 
 															if (!animating && inc) {
 																	animating = true;
+                                  currentItemIndex += (inc) ? ( (dir === 'up') ? 1 : -1 ) : 0;
+
 																	if (ul.style.top) {
-																			newTop = parseInt(ul.style.top, 10) + inc;
+                                      newTop = parseInt(ul.style.top, 10) + inc;
 																	}
+
 																	emile(
 																			ul, 
 																			'top:' + newTop.toString() + 'px', 
