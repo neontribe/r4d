@@ -97,3 +97,8 @@ font-size:16px;
 .development-widget div.clear {
     clear: both;
 }
+
+.development-widget a.disabled {
+background:#ccc !important;
+cursor:default;
+}
