@@ -187,8 +187,8 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += '<a href="javascript:void(0);">&#x25bc;/&#x25b2;</a>'; // up arrow
-										markup += '<a href="javascript:void(0);">&#x25bc;/&#x25bc;</a>'; // down arrow
+                    markup += '<a href="javascript:void(0);">&#x25bc;</a>'; // up arrow
+										markup += '<a href="javascript:void(0);">&#x25b2;</a>'; // down arrow
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
@@ -205,7 +205,6 @@
                         // It'll be the last element in out div
 
                         var ul = div.getElementsByTagName('ul')[0],
-                            //increment = 200,
                             animating = false,
                             currentItemIndex = 0,
                             currentItem = ul.childNodes[currentItemIndex],
@@ -213,14 +212,6 @@
 															'up' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2],
 															'down' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -3]
 														};
-
-                        try {
-														buttons.up.innerHTML = '&#x25b2;'; // up arrow
-                            buttons.down.innerHTML = '&#x25bc;'; // down arrow
-                        } catch (e) {
-                            // Looks like we're in IE 7
-                            // Tempting to just give up...
-                        }
 
                         // Reset button disabled state on resize
                         window.onresize = function() {
@@ -266,18 +257,10 @@
 
 																							// Disable buttons at top or bottom
 																							if ((Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop)))) {
-																									try {
-																											buttons.down.className = 'disabled';
-																									} catch (e) {
-																											// sigh IE7
-																									}
+																							  buttons.down.className = 'disabled';
 																							}
 																							else if (Math.abs(newTop) <= 0) {
-																									try {
-																											buttons.up.className = 'disabled';
-																									} catch (e) {
-																											// sigh IE7
-																									}
+																							  buttons.up.className = 'disabled';
 																							}
 																					}
 																			},
