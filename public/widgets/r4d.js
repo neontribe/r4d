@@ -187,7 +187,8 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += '<a href="javascript:void(0);">&#x25bc;/&#x25b2;</a>';
+										markup += '<a href="javascript:void(0);">&#x25bc;</a>'; // down arrow
+                    markup += '<a href="javascript:void(0);">&#x25b2;</a>'; // up arrow
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
@@ -201,59 +202,75 @@
                     // We do this late since the click on the scroll link isn't urgent
                     loadScript(base_url + "emile.js", function(){
                         // Deal with clicks on the scroller
-                        //It'll be the last element in out div
-                        var newTop = -200,
-                            increment = -200,
+                        // It'll be the last element in out div
+
+                        var ul = div.getElementsByTagName('ul')[0],
                             animating = false,
-                            button = div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2];
-                        try {
-                            button.innerHTML = '&#x25bc;';
-                        } catch (e) {
-                            // Looks like we're in IE 7
-                            // Tempting to just give up...
+                            currentItemIndex = 0,
+                            currentItem = ul.childNodes[currentItemIndex],
+														buttons = {
+															'up' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -2],
+															'down' : div.childNodes[0].childNodes[div.childNodes[0].childNodes.length -3]
+														};
+
+                        // Reset button disabled state on resize
+                        window.onresize = function() {
+                          each(buttons, function(button) {
+                            //TODO: handle resize event
+                          });
                         }
-                        
 
-                        addEvent(button, 'click', function (evt) {
-                            var ul = div.getElementsByTagName('ul')[0];
+												each(buttons, function(button) {
+                          // Initially disable up button
+													buttons.up.className = 'disabled';
 
-                            if (!animating) {
-                                animating = true;
-                                if (ul.style.top) {
-                                    newTop = parseInt(ul.style.top, 10) + increment;
-                                }
-                                
-                                emile(
-                                    ul, 
-                                    'top:' + newTop.toString() + 'px', 
-                                    {
-                                        duration: 600,
-                                        easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
-                                        after: function(){ 
-                                            if (Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop))) {
-                                                try {
-                                                    button.innerHTML = '&#x25b2;';
-                                                } catch (e) {
-                                                    // sigh IE7
-                                                }
-                                                increment = 200;
-                                            }
-                                            if (Math.abs(newTop) <= 0) {
-                                                try {
-                                                    button.innerHTML = '&#x25bc;';
-                                                } catch (e) {
-                                                    // sigh IE7
-                                                }
-                                                increment = -200;
-                                            }
-                                        }
-                                    },
-                                    function () { animating = false; }
-                                );
-                                
-                            }
-                            return false;
-                        });
+													addEvent(button, 'click', function (evt) {
+
+                              currentItem = ul.childNodes[currentItemIndex];
+
+															var dir = (button === buttons.down) ? 'up' : 'down',
+                                  prevItem = ul.childNodes[currentItemIndex - 1],
+                                  nextItem = ul.childNodes[currentItemIndex + 1],
+                                  inc = (button.className !== 'disabled') ? ( (dir === 'up') ? -currentItem.offsetHeight : ( (prevItem) ? prevItem.offsetHeight : 0 ) ) : 0,
+																	newTop = inc;
+
+															if (!animating && inc) {
+																	animating = true;
+                                  currentItemIndex += (inc) ? ( (dir === 'up') ? 1 : -1 ) : 0;
+
+																	if (ul.style.top) {
+                                      newTop = parseInt(ul.style.top, 10) + inc;
+																	}
+
+																	emile(
+																			ul, 
+																			'top:' + newTop.toString() + 'px', 
+																			{
+																					duration: 600,
+																					easing: function(pos){if((pos/=0.5)<1){return 0.5*Math.pow(pos,4)}return -0.5*((pos-=2)*Math.pow(pos,3)-2)},
+																					after: function(){ 
+
+																							// Reset button class names
+																							each (buttons, function(b) {
+																								b.className = '';
+																							});
+
+																							// Disable buttons at top or bottom
+																							if ((Math.abs(newTop) >= (ul.offsetHeight - Math.abs(newTop)))) {
+																							  buttons.down.className = 'disabled';
+																							}
+																							else if (Math.abs(newTop) <= 0) {
+																							  buttons.up.className = 'disabled';
+																							}
+																					}
+																			},
+																			function () { animating = false; }
+																	);
+																	
+															}
+															return false;
+													});
+												});
                     });
                 });
             }
