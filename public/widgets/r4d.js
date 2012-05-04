@@ -187,8 +187,8 @@
                     });
                     markup += "</ul>";
                     markup += "</div>";
-                    markup += '<a href="javascript:void(0);">&#x25bc;</a>'; // up arrow
-										markup += '<a href="javascript:void(0);">&#x25b2;</a>'; // down arrow
+										markup += '<a href="javascript:void(0);">&#x25bc;</a>'; // down arrow
+                    markup += '<a href="javascript:void(0);">&#x25b2;</a>'; // up arrow
                     markup += '<div class="clear"></div>';
                     markup += "</div>";
 
