@@ -50,6 +50,9 @@ background-image: -o-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,2
 background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
 background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
 background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 35%, rgb(221,221,221) 100%) !important;
+filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#dddddd', EndColorStr='#ffffff') !important; /* IE6, IE7 */
+-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dddddd', EndColorStr='#ffffff')" !important; /* IE8 */
+behavior: url('./js/libs/PIE/PIE.htc');
 }
 
 .development-widget div > a {
@@ -90,10 +93,15 @@ color:#111 !important;
 }
 
 .development-widget div ul li a:after {
-content:" \21D7";
+content:" \2023";
 font-size:16px;
 }
 
 .development-widget div.clear {
     clear: both;
+}
+
+.development-widget a.disabled {
+background:#ccc !important;
+cursor:default;
 }
