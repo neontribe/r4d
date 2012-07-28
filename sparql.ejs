@@ -2,7 +2,7 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
 SELECT * WHERE 
-{  # Substitute in your own project URI from projects.dfid.gov.uk here...   
+{ GRAPH <http://www.dfid.gov.uk/r4d/> { # Substitute in your own project URI from projects.dfid.gov.uk here...   
   ?r4dProject dc:identifier <http://projects.dfid.gov.uk/project.aspx?Project=<%= prid %>>.    
   ?r4dProject dc:title ?projectTitle.      
   ?output dcterms:isPartOf ?r4dProject.   
@@ -10,5 +10,5 @@ SELECT * WHERE
   OPTIONAL {?output dc:creator ?outputCreator.}  
   OPTIONAL {?output dc:description ?outputDescription. }
   OPTIONAL {<http://data.kasabi.com/dataset/iati/activity/GB-1-<%= prid %>> dc:title ?dfidProjectTitle. }
-  ?output dc:date ?outputDate.
+  ?output dc:date ?outputDate. }
 } LIMIT 200
