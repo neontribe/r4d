@@ -6,7 +6,7 @@ var http = require("http")
     ,port = process.env.PORT || 3000
     ,sparql_api_key = "368389391f29f9442406b400a42e1dfd6eaacb22"
     ,sparql_host = "iati-ld.tklapp.com"
-    ,sparql_path = "/sparql/"
+    ,sparql_path = "/r4d/sparql/"
     ,redis_cache_ttl = 1
     ,redis_cache_prefix = "r4dProjectCache:"
     ,sparql
