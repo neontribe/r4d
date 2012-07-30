@@ -4,9 +4,9 @@ var http = require("http")
     ,connect = require("connect")
     ,ejs = require("ejs")
     ,port = process.env.PORT || 3000
-    ,kasabi_api_key = "368389391f29f9442406b400a42e1dfd6eaacb22"
-    ,kasabi_host = "api.kasabi.com"
-    ,kasabi_path = "/dataset/r4d-aid-data/apis/sparql"
+    ,sparql_api_key = "368389391f29f9442406b400a42e1dfd6eaacb22"
+    ,sparql_host = "iati-ld.tklapp.com"
+    ,sparql_path = "/r4d/sparql/"
     ,redis_cache_ttl = 1
     ,redis_cache_prefix = "r4dProjectCache:"
     ,sparql
@@ -68,10 +68,10 @@ connect(
                     squery = encodeURIComponent(ejs.render(sparql, {
                         prid : req.params.prid
                     })).replace(/%20/g, '+');
-                    query = "apikey=" + kasabi_api_key + "&output=json&query=";
+                    query = "output=json&query=";
                     opts = {
-                        host : kasabi_host,
-                        path : kasabi_path + '?' + query + squery,
+                        host : sparql_host,
+                        path : sparql_path + '?' + query + squery,
                         port : "80"
                     };
         
